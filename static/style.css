@@ -24,7 +24,7 @@ html, body {
 
 .slider {
 	height: 800px;
-	background-image: url(img/slider.jpg); 
+	background-image: url(img/slider.jpg);
 	padding-left: 98px;
 	padding-right: 211px;
 	position: relative;
