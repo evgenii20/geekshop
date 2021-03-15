@@ -16,7 +16,7 @@ from mainapp.models import Product, ProductCategory
 
 def main(request):
     title = 'Главная'
-    products = Product.objects.all()[:4]
+    products = Product.objects.all()[:3]
     content = {'title': title, 'products': products}
     return render(request, 'mainapp/index.html', content)
 
@@ -31,7 +31,7 @@ def products(request, pk=None):
     #     {'href': 'products_klassic', 'name': 'классика'},
     # ]
     title = 'Продукты'
-    same_products = Product.objects.all()[:4]
+    same_products = Product.objects.all()[:3]
     links_menu = ProductCategory.objects.all()
     content = {
         'title': title,

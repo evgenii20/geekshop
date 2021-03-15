@@ -24,6 +24,7 @@ urlpatterns = [
     # path('products/', mainapp.products, name='products'),
     # include all url is mainapp.urls, т.е. в каждом приложении свои URL, namespace='products' - для использования URL
     path('products/', include('mainapp.urls', namespace='products')),
+    path('auth/', include('authapp.urls', namespace='auth')),
     path('contact/', mainapp.contact, name='contact'),
 
     path('admin/', admin.site.urls),

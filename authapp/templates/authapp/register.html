@@ -1,0 +1,21 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+{% block content %}
+{#    enctype="multipart/form-data" - указывает обработчику что мы отправляем ещё и файлы, #}
+{#    без этой настройки контроллер файлы не увидит #}
+    <form class="form-horizontal" action="{% url 'auth:register' %}" method="post" enctype="multipart/form-data">
+        {#        {% csrf_token %} - защита от фишинга и прочего #}
+        {% csrf_token %}
+{#        {{ login_form.as_p }}#}
+        {{ register_form.as_p }}
+        <br>
+        <input class="form-control" type="submit" value="регистрация"/>
+    </form>
+    <br>
+    {#    <button class="btn btn-round form-control">#}
+    <button class="btn btn-link form-control">
+        <a href="{% url 'auth:login' %}">
+            вход
+        </a>
+    </button>
+{% endblock %}
