@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'mainapp',
+    'authapp'
 ]
 # Промежуточный слой, срабатывает до начала работы контроллера
 MIDDLEWARE = [
@@ -129,3 +130,7 @@ STATICFILES_DIRS = (
 # Подключаем папку в которой хранятся файлы пользователя
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Это необходимо, чтобы Django вместо модели User использовал в приложении аутентификации нашу
+# модель.
+AUTH_USER_MODEL = 'authapp.ShopUser'
