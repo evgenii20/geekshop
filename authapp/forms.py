@@ -33,6 +33,22 @@ class ShopUserRegisterForm(UserCreationForm):
             raise forms.ValidationError("Вы слишком молоды!")
         return data
 
+    def clean_email(self):
+        data = self.cleaned_data['email']
+
+        # для проектов с низкой нагрузкой !>й
+        # if ShopUser.objects.filter(email=data).count() > 0:
+        #     f"""select count(*) from authapp_shopuser where email={data}"""
+        #     pass # raise ...
+        # f"""select count(1) from authapp_shopuser where email={data}"""
+
+        # users_emails = ShopUser.objects.values_list('email', flat=True)
+        # users_emails = list(ShopUser.objects.values_list('email', flat=True))
+        # if data in users_emails: из базы
+        if ShopUser.objects.filter(email=data).exists():
+            raise forms.ValidationError("Email exists")
+        return data
+
 
 class ShopUserEditForm(UserChangeForm):
     class Meta:
@@ -53,4 +69,11 @@ class ShopUserEditForm(UserChangeForm):
         data = self.cleaned_data['age']
         if data < 18:
             raise forms.ValidationError("Вы слишком молоды!")
+        return data
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        # exists из SQL
+        if ShopUser.objects.filter(email=data).exists():
+            raise forms.ValidationError("Email exists")
         return data

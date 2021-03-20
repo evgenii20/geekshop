@@ -12,7 +12,13 @@
     {% endblock %}
 </head>
 <body>
+
+
+{% block menu %}
+{#    {% include 'mainapp/includes/inc_menu.html' %}#}
+{% endblock %}
 <div class="container">
+
     {# блок контента #}
     {% block content %}
     {% endblock %}

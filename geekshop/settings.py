@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'mainapp',
-    'authapp'
+    'authapp',
+    'basketapp'
 ]
 # Промежуточный слой, срабатывает до начала работы контроллера
 MIDDLEWARE = [

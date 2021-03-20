@@ -1,0 +1,60 @@
+<a href="{% url 'main' %}" class="logo"></a>
+<ul class="menu">
+    {#    <ul>#}
+    <li>
+        <a href="{% url 'main' %}" {% if request.resolver_match.url_name == 'main' %}class="active"{% endif %}>
+            домой
+        </a>
+    </li>
+    {# 'products:products' - это <NameSpace>:<Name> #}
+    <li>
+        {#                <a href="{% url 'products:index' %}"#}
+{#        <a href="{% url 'products:products' %}"#}
+        <a href="{% url 'products:index' %}"
+           class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">
+            продукты
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'contact' %}"
+           {% if request.resolver_match.url_name == 'contact' %}class="active"{% endif %}>
+            контакты
+        </a>
+    </li>
+    {% if user.is_authenticated %}
+        <li>
+            <a href="{% url 'auth:edit' %}">
+                {{ user.first_name|default:"Пользователь" }}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'auth:logout' %}">
+                выход
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a href="{% url 'auth:login' %}">
+                вход
+            </a>
+        </li>
+    {% endif %}
+    <li>
+        <a href="#" class="search"></a>
+    </li>
+    <li>
+{#        <a href="{% url 'basket:view' %}" class="basket">#}
+{#                <span>#}
+{#                    {% if basket %}{{ basket|length }}{% endif %}#}
+{#                    {{ basket }}#}
+{#                </span>#}
+{#        </a>#}
+        <a href="{% url 'basket:view' %}" class="basket">
+                <span>
+                    {% if basket %}{{ basket|length }}{% endif %}
+{#                    {{ basket }}#}
+                </span>
+        </a>
+    </li>
+</ul>
+
