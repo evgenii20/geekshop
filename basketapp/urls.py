@@ -14,5 +14,6 @@ urlpatterns = [
     # Update
     path('add/<int:pk>/', basketapp.basket_add, name='add'),
     # Delete
-    path('remove/<int:pk>/', basketapp.basket_remove, name='remove')
+    path('remove/<int:pk>/', basketapp.basket_remove, name='remove'),
+    path('edit/<int:pk>/<int:quantity>/', basketapp.basket_edit, name='edit')
 ]

@@ -3,18 +3,18 @@
 {% block menu %}
     <div class="slider">
         <div class="header clearfix">
-{#            <a href="index.html" class="logo"></a>#}
-{#            <a href="{% url 'main' %}" class="logo"></a>#}
-{#            <ul class="menu">#}
-                {#                {% include 'mainapp/includes/inc_menu.html' %}#}
-                {% include 'mainapp/includes/inc_menu.html' %}
-{#            </ul>#}
-{#            <a href="#" class="search"></a>#}
-{#            <a href="{% url 'basket:view' %}" class="basket">#}
-{#                <span>#}
-{#                    {% if basket %}{{ basket|length }}{% endif %}#}
-{#                </span>#}
-{#            </a>#}
+            {#            <a href="index.html" class="logo"></a>#}
+            {#            <a href="{% url 'main' %}" class="logo"></a>#}
+            {#            <ul class="menu">#}
+            {#                {% include 'mainapp/includes/inc_menu.html' %}#}
+            {% include 'mainapp/includes/inc_menu.html' %}
+            {#            </ul>#}
+            {#            <a href="#" class="search"></a>#}
+            {#            <a href="{% url 'basket:view' %}" class="basket">#}
+            {#                <span>#}
+            {#                    {% if basket %}{{ basket|length }}{% endif %}#}
+            {#                </span>#}
+            {#            </a>#}
 
         </div>
         <div class="text-slider">
@@ -42,7 +42,11 @@
         <div class="tab-content">
             {% for product in products %}
                 <div class="block">
-                    <a href="#"><img src="/media/{{ product.image }}" alt="{{ product.name }}">
+                    {#  <a href="#">#}
+                    {# При клике на продуктах они не будут добавляться в корзину, а станет появляться окно с #}
+                    {# подробным описанием продукта и кнопкой заказать.#}
+                    <a href="{% url 'products:product' product.pk %}">
+                        <img src="/media/{{ product.image }}" alt="{{ product.name }}">
                         <div class="text">
                             <img src="{% static 'img/icon-hover.png' %}" alt="{{ product.name }}">
                             <h4>{{ product.name }}</h4>
@@ -62,7 +66,7 @@
             </div>
         </div>
     </div>
-    {#    <div class="clr"></div>#}
+    <div class="clr"></div>
 {% endblock %}
 
 

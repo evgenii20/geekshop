@@ -23,5 +23,8 @@ urlpatterns = [
     # path('', mainapp.products, name='products'),
     path('', mainapp.products, name='index'),
     # используем для подгрузки категорий "<int:pk>/"
-    path('<int:pk>/', mainapp.products, name='category'),
+    # path('<int:pk>/', mainapp.products, name='category'),
+    path('category/<int:pk>/', mainapp.products, name='category'),
+    # path('<int:pk>/', mainapp.products, name='category'),
+    path('product/<int:pk>/', mainapp.product, name='product'),
 ]
