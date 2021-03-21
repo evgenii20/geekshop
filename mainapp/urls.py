@@ -20,7 +20,8 @@ import mainapp.views as mainapp
 app_name = 'mainapp'
 
 urlpatterns = [
-    path('', mainapp.products, name='products'),
+    # path('', mainapp.products, name='products'),
+    path('', mainapp.products, name='index'),
     # используем для подгрузки категорий "<int:pk>/"
     path('<int:pk>/', mainapp.products, name='category'),
 ]
