@@ -71,9 +71,10 @@ class ShopUserEditForm(UserChangeForm):
             raise forms.ValidationError("Вы слишком молоды!")
         return data
 
-    def clean_email(self):
-        data = self.cleaned_data['email']
-        # exists из SQL
-        if ShopUser.objects.filter(email=data).exists():
-            raise forms.ValidationError("Email exists")
-        return data
+    # def clean_email(self):
+    #     data = self.cleaned_data['email']
+    #     # exists из SQL
+    #     if ShopUser.objects.filter(email=data).exists():
+    #         raise forms.ValidationError("Email exists")
+    #     return data
+

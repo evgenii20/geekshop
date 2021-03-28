@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from mainapp import views as mainapp
 
+
 urlpatterns = [
     path('', mainapp.main, name='main'),
     # path('products/', mainapp.products, name='products'),
@@ -28,7 +29,12 @@ urlpatterns = [
     path('auth/', include('authapp.urls', namespace='auth')),
     path('contact/', mainapp.contact, name='contact'),
 
-    path('admin/', admin.site.urls),
+    # ссылка на стандартную админку, переименуем в "control/" для добавления своей админки ниже
+    # path('admin/', admin.site.urls),
+    # path('control/', admin.site.urls),
+
+    # своя админка namespace='admins' - исключаем конфликт
+    path('admin/', include('adminapp.urls', namespace='admin'))
 ]
 
 # настройка работает локально

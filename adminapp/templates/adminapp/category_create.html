@@ -1,0 +1,23 @@
+{#{% extends 'authapp/base.html' %}#}
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    {#    <div class="login">#}
+    <div class="users_list">
+        <form class="form-horizontal" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {#  ссылка на переменную в контролере 33стр. #}
+            {{ update_form.as_p }}
+            {#            {{ form.as_p }}#}
+
+            <input class="form-control" type="submit" value="сохранить">
+        </form>
+        <button class="btn btn-round form-control last">
+            {#        <a href="{% url 'admin:users' %}">#}
+            <a href="{% url 'adminapp:category_read' %}">
+                к списку категорий
+            </a>
+        </button>
+    </div>
+{% endblock %}
