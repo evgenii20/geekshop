@@ -4,51 +4,51 @@
 {% block menu %}
     <div class="hero-white">
         <div class="header clearfix">
-{#            <a href="index.html" class="logo"></a>#}
-{#            <a href="{% url 'main' %}" class="logo"></a>#}
+            {#            <a href="index.html" class="logo"></a>#}
+            {#            <a href="{% url 'main' %}" class="logo"></a>#}
             {#            <ul class="menu">#}
             {% include 'mainapp/includes/inc_menu.html' %}
             {#            </ul>#}
-{#            <a href="#" class="search"></a>#}
-{#            <a href="#" class="basket"></a>#}
+            {#            <a href="#" class="search"></a>#}
+            {#            <a href="#" class="basket"></a>#}
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
     <div class="hero">
-{#        <div class="header clearfix">#}
-{#            <a href="index.html" class="logo"></a>#}
-{#            <ul class="menu">#}
-{#                {% include 'mainapp/includes/inc_menu.html' %}#}
-{#                {% include 'mainapp/includes/inc_menu.html' %}#}
-{#            </ul>#}
-{#            <a href="#" class="search"></a>#}
-{#            <a href="#" class="basket"></a>#}
-{#        </div>#}
+        {#        <div class="header clearfix">#}
+        {#            <a href="index.html" class="logo"></a>#}
+        {#            <ul class="menu">#}
+        {#                {% include 'mainapp/includes/inc_menu.html' %}#}
+        {#                {% include 'mainapp/includes/inc_menu.html' %}#}
+        {#            </ul>#}
+        {#            <a href="#" class="search"></a>#}
+        {#            <a href="#" class="basket"></a>#}
+        {#        </div>#}
         <h1>наши контакты</h1>
     </div>
 
     <div class="location">
         {% for location in locations %}
-        <div class="location-1">
-            <i class="fa fa-map-marker fa-5x"></i>
-            <h4>{{ location.city }}</h4>
-            <div class="contacts">
-                <h5>Телефон</h5>
-                <p>{{ location.phone }}</p>
+            <div class="location-1">
+                <i class="fa fa-map-marker fa-5x"></i>
+                <h4>{{ location.city }}</h4>
+                <div class="contacts">
+                    <h5>Телефон</h5>
+                    <p>{{ location.phone }}</p>
+                </div>
+                <div class="contacts">
+                    <h5>Email</h5>
+                    <p>{{ location.email }}</p>
+                </div>
+                <div class="contacts">
+                    <h5>Адрес</h5>
+                    <p>{{ location.address }}</p>
+                </div>
             </div>
-            <div class="contacts">
-                <h5>Email</h5>
-                <p>{{ location.email }}</p>
-            </div>
-            <div class="contacts">
-                <h5>Адрес</h5>
-                <p>{{ location.address }}</p>
-            </div>
-        </div>
         {% endfor %}
     </div>
 
-    {#		<div class="clr"></div>#}
+    <div class="clr"></div>
 {% endblock %}

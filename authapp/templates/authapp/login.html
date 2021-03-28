@@ -2,14 +2,18 @@
 {% load static %}
 {% block content %}
     <form class="form-horizontal" action="{% url 'auth:login' %}" method="post">
-{#        {% csrf_token %} - защита от фишинга и прочего #}
+        {#        {% csrf_token %} - защита от фишинга и прочего #}
         {% csrf_token %}
+        {#        стандартная авторизация прячет инпут в поле "next", для считывания его в пост запросе authapp\views.py #}
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         {{ login_form.as_p }}
         <br>
-        <input class="form-control" type="submit" value="войти" />
+        <input class="form-control" type="submit" value="войти"/>
     </form>
     <br>
-{#    <button class="btn btn-round form-control">#}
+    {#    <button class="btn btn-round form-control">#}
     <button class="btn btn-link form-control">
         <a href="{% url 'auth:register' %}">
             зарегистрироваться

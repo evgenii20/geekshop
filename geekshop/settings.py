@@ -135,3 +135,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Это необходимо, чтобы Django вместо модели User использовал в приложении аутентификации нашу
 # модель.
 AUTH_USER_MODEL = 'authapp.ShopUser'
+
+# Применяется ко всем декораторам отвечающим за авторизацию пользователя например "@login_required"
+LOGIN_URL = '/auth/login/'

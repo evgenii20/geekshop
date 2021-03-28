@@ -3,10 +3,11 @@
 
 {% block menu %}
     <div class="hero-white">
-    <div class="header clearfix">
-{#        <div class="menu clearfix">#}
+        <div class="header clearfix">
+            {#        <div class="menu clearfix">#}
             {% include 'mainapp/includes/inc_menu.html' %}
-{#        </div>#}
+            {#        </div>#}
+        </div>
     </div>
     <div class="links clearfix">
         {% include 'mainapp/includes/inc_categories_menu.html' %}
@@ -16,19 +17,19 @@
 {% block content %}
 
     {#    <div class="hero-white">#}
-{#        <div class="header clearfix">#}
-{#            <a href="index.html" class="logo"></a>#}
-{#            <ul class="menu">#}
-{#                {% include 'mainapp/includes/inc_menu.html' %}#}
-{#            </ul>#}
-{#            <a href="#" class="search"></a>#}
-{#            <a href="#" class="basket"></a>#}
-{#        </div>#}
-{#    </div>#}
+    {#        <div class="header clearfix">#}
+    {#            <a href="index.html" class="logo"></a>#}
+    {#            <ul class="menu">#}
+    {#                {% include 'mainapp/includes/inc_menu.html' %}#}
+    {#            </ul>#}
+    {#            <a href="#" class="search"></a>#}
+    {#            <a href="#" class="basket"></a>#}
+    {#        </div>#}
+    {#    </div>#}
     <div class="details">
-{#        <div class="links clearfix">#}
-{#            {% include 'mainapp/includes/inc_categories_menu.html' %}#}
-{#        </div>#}
+        {#        <div class="links clearfix">#}
+        {#            {% include 'mainapp/includes/inc_categories_menu.html' %}#}
+        {#        </div>#}
 
         <div class="products_list">
             <div class="title clearfix">
@@ -40,8 +41,9 @@
                 {% for product in products %}
                     <div class="block">
                         {# <a> добавление товара          #}
-                        <a href="{% url 'basket:add' product.pk %}">
-{#                            <img src="/media/{{ product.image }}" alt="product">#}
+                        {#                        <a href="{% url 'basket:add' product.pk %}">#}
+                        <a href="{% url 'products:product' product.pk %}">
+                            {#                            <img src="/media/{{ product.image }}" alt="product">#}
                             <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}">
                             <div class="text">
                                 <img src="{% static 'img/icon-hover.png' %}" alt="hover">
@@ -54,5 +56,5 @@
             </div>
         </div>
     </div>
-    {#    <div class="clr"></div>#}
+    <div class="clr"></div>
 {% endblock %}

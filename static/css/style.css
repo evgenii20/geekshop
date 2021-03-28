@@ -243,7 +243,7 @@ html, body {
 }
 
 .user_avatar img {
-    width: 300px;
+    width: 200px;
     border-radius: 25px;
 }
 
@@ -308,8 +308,8 @@ html, body {
 }
 
 .search {
-	display: block;
-	width: 23px;
+	/*display: block;
+	width: 23px;*/
 	height: 23px;	
 	background-image: url(/static/img/search.png);
 	/*position: absolute;*/
@@ -318,7 +318,7 @@ html, body {
 	background-repeat: no-repeat;
 }
 .basket {
-	display: block;
+	/*display: block;
 	/*width: 23px;*/
 	height: 23px;	
 	background-image: url(/static/img/basket.png);
@@ -1146,7 +1146,7 @@ td:first-child {
 }
 .slider-product {
 	width: 570px;
-	height: 570px;
+	/*height: 570px;*/
 }
 .slider-control {
 	width: 420px;
