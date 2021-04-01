@@ -8,6 +8,7 @@ import random
 from django.conf import settings
 # импортируем только файл, все переменные и константы
 # from geekshop import settings
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
@@ -47,56 +48,48 @@ def main(request):
     return render(request, 'mainapp/index.html', content)
 
 
+# def products(request, pk=None, page=1):
 def products(request, pk=None):
-    # print(pk)
-    # описание url
-    # links_menu = [
-    #     {'href': 'products_all', 'name': 'все'},
-    #     {'href': 'products_home', 'name': 'дом'},
-    #     {'href': 'products_office', 'name': 'офис'},
-    #     {'href': 'products_modern', 'name': 'модерн'},
-    #     {'href': 'products_klassic', 'name': 'классика'},
-    # ]
     # только для продукта
     title = 'Продукты'
-    links_menu = ProductCategory.objects.all()
+    # links_menu = ProductCategory.objects.all()
+    # is_active=True - не показывать скрытые
+    links_menu = ProductCategory.objects.filter(is_active=True)
     basket = get_basket(request.user)
+
+    page = request.GET.get('p', 1)
 
     if pk is not None:
         if pk == 0:
-            # products_list = Product.objects.all().order_by('price').select_related()
-            products = Product.objects.all().order_by('price')
+            # products = Product.objects.all().order_by('price')
+            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
             # категория товара на странице продукта
             # category_item = {'name': 'все', 'pk': 0}
-            category = {'name': 'все'}
-            # report = []
-            # for prod in products_list:
-            #     report.append({
-            #         'category': prod.category.name,
-            #         'price': prod.price
-            #     })
+            category = {'name': 'все', 'pk': 0}
         else:
-            # Не совсем верный вариант
-            # category_item = ProductCategory.objects.filter(pk=pk).first()
-            # if not category_item:
-            #     raise ...
-            # category_item = ProductCategory.objects.get(pk=pk)
-            #                                   модель, условие
             category = get_object_or_404(ProductCategory, pk=pk)
             # если не 404, то выбираем объекты
-            products = Product.objects.filter(category__pk=pk).order_by('price')
-            # products_list = Product.objects.filter(category=category_item)
+            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).\
+                order_by('price')
+            # products_list = Product.objects.filter(category=
+
+        # постраничный вывод
+        paginator = Paginator(products, 2)
+        # обработка ошибок
+        try:
+            products_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
 
         content = {
             'title': title,
             'links_menu': links_menu,
             'category': category,
             # 'category': category_item,
-            'products': products,
-            # 'products': products_list,
-            # 'hot_product': hot_product,
-            # 'same_products': same_products,
-            # 'basket': get_basket(request.user)
+            # 'products': products,
+            'products': products_paginator,
             'basket': basket
         }
         return render(request, 'mainapp/products_list.html', content)

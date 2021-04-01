@@ -2,16 +2,16 @@
 {% load static %}
 
 {% block content %}
-<div class="user_delete">
-{#    {% if category_to_delete.is_active %}#}
+<div class="category_delete">
+{#    {% if object.is_active %}#}
     {% if object.is_active %}
-        Уверены, что хотите удалить <b>{{ object.name }}</b>
+        Уверены, что хотите удалить продукт <b>{{ object.name }}</b>
     {% else %}
-        Уверены, что хотите восстановить <b>{{ object.name }}</b>
+        Уверены, что хотите восстановить продукт <b>{{ object.name }}</b>
     {% endif %}
 
     {# Кнопка удалить в форме с пост запросом #}
-    <form action="{% url 'adminapp:category_delete' object.pk %}"
+    <form action="{% url 'adminapp:product_delete' object.pk %}"
           method="post">
         {% csrf_token %}
         {# блок проверки удаления и восстановления пользователя #}
@@ -22,7 +22,7 @@
         {% endif %}
     </form>
     <button class="btn btn-success">
-        <a href="{% url 'adminapp:category_read' %}">
+        <a href="{% url 'adminapp:products' object.category.pk %}">
             Отмена
         </a>
     </button>
