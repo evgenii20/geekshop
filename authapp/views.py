@@ -30,6 +30,7 @@ def login(request):
             auth.login(request, user)
             # передали next из формы стандартной авторизации в пост запросе скрытого инпута
             if 'next' in request.POST.keys():
+                # print('redirect next', request.POST['next'])
                 return HttpResponseRedirect(request.POST['next'])
             else:
                 return HttpResponseRedirect(reverse('main'))
@@ -76,6 +77,7 @@ def edit(request):
             return HttpResponseRedirect(reverse('auth:edit'))
     else:
         edit_form = ShopUserEditForm(instance=request.user)
+
     content = {
         'title': title,
         'edit_form': edit_form

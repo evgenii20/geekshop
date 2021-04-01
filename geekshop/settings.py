@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     'mainapp',
     'authapp',
-    'basketapp'
+    'basketapp',
+    'adminapp'
 ]
 # Промежуточный слой, срабатывает до начала работы контроллера
 MIDDLEWARE = [

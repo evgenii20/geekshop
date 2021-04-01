@@ -9,7 +9,7 @@
     {# 'products:products' - это <NameSpace>:<Name> #}
     <li>
         {#                <a href="{% url 'products:index' %}"#}
-{#        <a href="{% url 'products:products' %}"#}
+        {#        <a href="{% url 'products:products' %}"#}
         <a href="{% url 'products:index' %}"
            class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">
             продукты
@@ -22,33 +22,38 @@
         </a>
     </li>
     {% if user.is_authenticated %}
-        <li>
-            <a href="{% url 'auth:edit' %}">
-                {{ user.first_name|default:"Пользователь" }}
-            </a>
-        </li>
-        <li>
-            <a href="{% url 'auth:logout' %}">
-                выход
-            </a>
-        </li>
-    {% else %}
-        <li>
-            <a href="{% url 'auth:login' %}">
-                вход
-            </a>
-        </li>
+    <li>
+        <a href="{% url 'auth:edit' %}">
+            {{ user.first_name|default:"Пользователь" }}
+            {#                {{ user.first_name }}#}
+        </a>
+    </li>
     {% endif %}
+    {% if user.is_superuser %}
+        <li>
+        <a href="{% url 'adminapp:user_read' %}">
+            админка
+            {#                {{ user.first_name }}#}
+        </a>
+    </li>
+    {% endif %}
+    <li>
+        {% if user.is_authenticated %}
+            <a href="{% url 'auth:logout' %}">выход</a>
+        {% else %}
+            <a href="{% url 'auth:login' %}">вход</a>
+        {% endif %}
+    </li>
     <li>
         <a href="#" class="search"></a>
     </li>
     <li>
-{#        <a href="{% url 'basket:view' %}" class="basket">#}
-{#                <span>#}
-{#                    {% if basket %}{{ basket|length }}{% endif %}#}
-{#                    {{ basket }}#}
-{#                </span>#}
-{#        </a>#}
+        {#        <a href="{% url 'basket:view' %}" class="basket">#}
+        {#                <span>#}
+        {#                    {% if basket %}{{ basket|length }}{% endif %}#}
+        {#                    {{ basket }}#}
+        {#                </span>#}
+        {#        </a>#}
         <a href="{% url 'basket:view' %}" class="basket">
                 <span>
 {#                {% if basket %} - есть хотябы один объект в модельке basket#}
@@ -57,7 +62,7 @@
                         {{ basket.0.total_cost|floatformat:0 }} руб.
                         ({{ basket.0.total_quantity }} шт.)
                     {% endif %}
-{#                    {{ basket }}#}
+                    {#                    {{ basket }}#}
                 </span>
         </a>
     </li>
