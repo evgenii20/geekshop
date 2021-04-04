@@ -4,20 +4,31 @@
     </li>
     <li>
         {#        <a href="{% url 'adminapp:user_read' %}"#}
-{#        <a class="{% if request.resolver_match.url_name == 'users' %}active{% endif %}"#}
+        {#        <a class="{% if request.resolver_match.url_name == 'users' %}active{% endif %}"#}
         <a class="{% if 'user' in request.resolver_match.url_name %}active{% endif %}"
            href="{% url 'adminapp:user_read' %}">пользователи</a>
     </li>
     <li>
-        {#        <a class = "{% if 'category' in request.resolver_match.url_name == 'categories' or category.name %}active{% endif %}"#}
+        {#                <a class = "{% if 'category' in request.resolver_match.url_name == 'categories' or category.name %}active{% endif %}"#}
         <a class="{% if 'category' in request.resolver_match.url_name or 'product' in request.resolver_match.url_name %}active{% endif %}"
            href="{% url 'adminapp:category_read' %}">
             категории
-        {#         если есть шаблонная переменная переменная в adminapp/view.py 'category': category_item, то мы её вставляем #}
-        {% if category %}
-            : {{ category.name }}
-            {#                :<span>{{ category.name }}</span >#}
-        {% endif %}
+            {#         если есть шаблонная переменная переменная в adminapp/view.py 'category': category_item, то мы её вставляем #}
+            {% if category %}
+                : {{ category.name }}
+                {#                            :<span>{{ object.category.name }}</span >#}
+            {% endif %}
         </a>
+
     </li>
+
+    <a href="{% url 'basket:view' %}" class="basket basket_adm">
+                <span>
+                    {% if basket %}
+                        {{ basket.0.total_cost|floatformat:0 }} руб.
+                        ({{ basket.0.total_quantity }} шт.)
+                    {% endif %}
+                    {#                    {{ basket }}#}
+                </span>
+    </a>
 </ul>

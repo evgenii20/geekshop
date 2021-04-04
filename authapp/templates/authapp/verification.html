@@ -1,0 +1,16 @@
+{% extends 'authapp/base.html' %}
+
+{% block content %}
+    {#    {% if user.is_authenticated %}#}
+    {% if user.activation_key %}
+        <h3>Поздравляем!</h3>
+        <p>Пользователь {{ user.username }} был успешно активирован!</p>
+    {% else %}
+        <h3>Увы :(</h3>
+        <p>Активация не пройдена</p>
+    {% endif %}
+    <br>
+    <button class="btn btn-round form-control">
+        <a href="{% url 'main' %}" class="">на главную</a>
+    </button>
+{% endblock %}
