@@ -16,17 +16,6 @@ from django.shortcuts import render, get_object_or_404
 from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
-def get_basket(user):
-    # if request.user.is_authenticated:
-    # если пользователь авторизован "user.is_authenticated",
-    if user.is_authenticated:
-        # то возвращаем QuerySet, иначе [] - пустой список
-        return Basket.objects.filter(user=user)
-        # альтернативный вариант получения корзины пользователя
-        # _basket = request.user.basket.all()
-        # print(f'basket / _basket: {len(_basket)} / {len(basket)}')
-    return []
-
 def get_hot_product():
     "горячее предложение"
     products = Product.objects.all()
@@ -43,8 +32,8 @@ def get_same_products(hot_product):
 def main(request):
     title = 'Главная'
     products = Product.objects.all()[:3]
-    # content = {'title': title, 'products': products}
-    content = {'title': title, 'products': products, 'basket': get_basket(request.user)}
+    content = {'title': title, 'products': products}
+
     return render(request, 'mainapp/index.html', content)
 
 
@@ -55,7 +44,6 @@ def products(request, pk=None):
     # links_menu = ProductCategory.objects.all()
     # is_active=True - не показывать скрытые
     links_menu = ProductCategory.objects.filter(is_active=True)
-    basket = get_basket(request.user)
 
     page = request.GET.get('p', 1)
 
@@ -90,7 +78,6 @@ def products(request, pk=None):
             # 'category': category_item,
             # 'products': products,
             'products': products_paginator,
-            'basket': basket
         }
         return render(request, 'mainapp/products_list.html', content)
 
@@ -103,7 +90,6 @@ def products(request, pk=None):
         'links_menu': links_menu,
         'same_products': same_products,
         'hot_product': hot_product,
-        'basket': basket
     }
     return render(request, 'mainapp/products.html', content)
 
@@ -116,7 +102,6 @@ def product(request, pk):
         # QuerySet
         'links_menu': ProductCategory.objects.all(),
         'product': get_object_or_404(Product, pk=pk),
-        'basket': get_basket(request.user)
     }
     return render(request, 'mainapp/product.html', content)
 
@@ -128,5 +113,8 @@ def contact(request):
     # открываем JSON файл с объединением относительных путей и формируем структуру
     with open(os.path.join(settings.BASE_DIR, 'mainapp/json/contact__locations.json'), encoding='utf-8') as f:
         locations = json.load(f)
-    content = {'title': title, 'locations': locations, 'basket': get_basket(request.user)}
+    content = {
+        'title': title,
+        'locations': locations,
+    }
     return render(request, 'mainapp/contact.html', content)

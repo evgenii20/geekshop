@@ -56,8 +56,6 @@
         {#        </a>#}
         <a href="{% url 'basket:view' %}" class="basket">
                 <span>
-{#                {% if basket %} - есть хотябы один объект в модельке basket#}
-{#                и мы обращаемся к его методам total_cost и total_quantity. basket.0 - обращение к конкретному товару #}
                     {% if basket %}
                         {{ basket.0.total_cost|floatformat:0 }} руб.
                         ({{ basket.0.total_quantity }} шт.)
