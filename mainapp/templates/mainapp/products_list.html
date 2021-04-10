@@ -16,16 +16,6 @@
 {% endblock %}
 {% block content %}
 
-    {#    <div class="hero-white">#}
-    {#        <div class="header clearfix">#}
-    {#            <a href="index.html" class="logo"></a>#}
-    {#            <ul class="menu">#}
-    {#                {% include 'mainapp/includes/inc_menu.html' %}#}
-    {#            </ul>#}
-    {#            <a href="#" class="search"></a>#}
-    {#            <a href="#" class="basket"></a>#}
-    {#        </div>#}
-    {#    </div>#}
     <div class="details">
         {#        <div class="links clearfix">#}
         {#            {% include 'mainapp/includes/inc_categories_menu.html' %}#}
@@ -33,11 +23,36 @@
 
         <div class="products_list">
             <div class="title clearfix">
+
                 <h2>
                     Категория: "{{ category.name|title }}"
                 </h2>
+
             </div>
             <div class="category-products clearfix">
+                <div class="pagination" align="center"><br>
+{#                    {% if products.has_previous %}#}
+{#                        <a href="{% url 'products:page' category.pk products.previous_page_number %}"> << </a>#}
+{#                    {% endif %}#}
+{#                    <span class="current">#}
+{#                        страница {{ products.number }} из {{ products.paginator.num_pages }}#}
+{#                    </span>#}
+{#                    {% if products.has_next %}#}
+{#                        <a href="{% url 'products:page' category.pk products.next_page_number %}"> >> </a>#}
+{#                    {% endif %}#}
+
+                    {% if products.has_previous %}
+                        <a href="{% url 'products:category' category.pk %}?p={{ products.previous_page_number }}"> << </a>
+                    {% endif %}
+                    <span class="current">
+                        страница {{ products.number }} из {{ products.paginator.num_pages }}
+                    </span>
+                    {% if products.has_next %}
+                        <a href="{% url 'products:category' category.pk %}?p={{ products.next_page_number }}"> >> </a>
+                    {% endif %}
+                    <br>
+                    <br>
+                </div>
                 {% for product in products %}
                     <div class="block">
                         {# <a> добавление товара          #}
