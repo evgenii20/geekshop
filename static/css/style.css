@@ -605,12 +605,12 @@ html, body {
 
 .login div.user_avatar {
     position: fixed;
-    left: 175px;
+    left: 100px;
     top: 200px;
 }
 
 .user_avatar img {
-    width: 300px;
+    width: 200px;
     border-radius: 25px;
 }
 

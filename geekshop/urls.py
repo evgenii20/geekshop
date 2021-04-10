@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from mainapp import views as mainapp
 
 
@@ -34,7 +34,11 @@ urlpatterns = [
     # path('control/', admin.site.urls),
 
     # своя админка namespace='admins' - исключаем конфликт
-    path('admin/', include('adminapp.urls', namespace='admin'))
+    # с использованием регулярных выражений re_path для сложных проектов
+    # re_path(r'^admin/', include('adminapp.urls', namespace='admin'))
+    path('admin/', include('adminapp.urls', namespace='admin')),
+    # добавляем модуль "social_django"
+    path('', include('social_django.urls', namespace='social'))
 ]
 
 # настройка работает локально
