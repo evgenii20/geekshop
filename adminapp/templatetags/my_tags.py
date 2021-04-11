@@ -22,11 +22,7 @@ def media_folder_products(path_to_image):
     products_images/product1.jpg --> /media/products_images/product1.jpg"""
 
     if not path_to_image:
-<<<<<<< HEAD
-        path_to_image = 'products_images/default.png'
-=======
         path_to_image = 'products_images/default.jpg'
->>>>>>> lesson_9
 
     return f'{settings.MEDIA_URL}{path_to_image}'
 

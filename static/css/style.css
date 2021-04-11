@@ -425,11 +425,17 @@ html, body {
 
 .basket_list .basket_record {
     position: relative;
-    display: block;
-    height: 170px;
+    /*display: block;
+    height: 170px;*/
     float: none;
+	display: flex;
+	padding: 5px;
 }
-
+.basket_record_img{
+	/*width: 30%;*/
+	width: 50px;
+	height: 50px;
+}
 .basket_container .head {
     margin: 25px auto;
 }
@@ -605,12 +611,12 @@ html, body {
 
 .login div.user_avatar {
     position: fixed;
-    left: 175px;
+    left: 100px;
     top: 200px;
 }
 
 .user_avatar img {
-    width: 300px;
+    width: 200px;
     border-radius: 25px;
 }
 
@@ -760,7 +766,11 @@ html, body {
 .button-order img{
 	padding-left: 22px;
 }
-
+.order_container{
+	/*width: 65%;*/
+	width: 50%;
+	margin: 0 auto;
+}
 .green {
 	text-transform: uppercase;
 	color:  #43a047;
