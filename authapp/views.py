@@ -5,8 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
-
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm, ShopUserProfileEditForm
 
 # Create your views here.
 from authapp.models import ShopUser
@@ -81,15 +80,21 @@ def edit(request):
     if request.method == 'POST':
         # instance=request.user - указывает на тот объект который мы редактируем
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
+        # Добавим ещё одну форму
+        profile_form = ShopUserProfileEditForm(request.POST, instance=request.user.shopuserprofile)
+        if edit_form.is_valid() and profile_form.is_valid():
             edit_form.save()
+            # profile_form - сохраняется через сигналы, поэтому сохранение тут отсутствует
             return HttpResponseRedirect(reverse('auth:edit'))
     else:
+        # если GET запрос
         edit_form = ShopUserEditForm(instance=request.user)
+        profile_form = ShopUserProfileEditForm(instance=request.user.shopuserprofile)
 
     content = {
         'title': title,
-        'edit_form': edit_form
+        'edit_form': edit_form,
+        'profile_form': profile_form
     }
     return render(request, 'authapp/edit.html', content)
 

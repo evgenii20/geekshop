@@ -57,12 +57,8 @@ class UsersListView(ListView):
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, *args, **kwargs):
-<<<<<<< HEAD
-        # метод dispatch отвечает за контроль авторизации, но только при @method_decorator(user_passes_test(lambda u: u.is_superuser))
-=======
         # метод dispatch отвечает за контроль авторизации, но только при
         # @method_decorator(user_passes_test(lambda u: u.is_superuser))
->>>>>>> lesson_9
         return super().dispatch(*args, **kwargs)
 
 
@@ -316,63 +312,6 @@ class ProductCategoryDeleteView(DeleteView):
         return super().dispatch(*args, **kwargs)
 
 
-<<<<<<< HEAD
-@user_passes_test(lambda u: u.is_superuser)
-def products(request, pk):
-    title = 'админка/продукт'
-    # Если админ перешёл в несуществующую категорию выйдет ошибка 404
-    category = get_object_or_404(ProductCategory, pk=pk)
-    # category_item = get_object_or_404(ProductCategory, pk=pk)
-    products_list = Product.objects.filter(category__pk=pk).order_by('name')
-    # products_list = Product.objects.filter(category=category_item).order_by('-is_active')
-
-    content = {
-        'title': title,
-        'category': category,
-        # 'category': category_item,
-        'objects': products_list
-    }
-
-    return render(request, 'adminapp/products.html', content)
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def product_create(request, pk):
-    title = 'продукт/создание'
-    # проверка не ошибку
-    category_item = get_object_or_404(ProductCategory, pk=pk)
-    if request.method == 'POST':
-        product_form = ProductEditForm(request.POST, request.FILES)
-        if product_form.is_valid():
-            product_form.save()
-            return HttpResponseRedirect(reverse('adminapp:products', args=[pk]))
-    else:
-        # product_form = ProductEditForm(initial={'category': category_item})
-        product_form = ProductEditForm()
-    content = {
-        # 'form': product_form,
-        'title': title,
-        'update_form': product_form,
-        'category': category_item
-    }
-    return render(request, 'adminapp/product_update.html', content)
-
-
-# @user_passes_test(lambda u: u.is_superuser)
-# def product_read(request, pk):
-#     title = 'продукт/подробнее'
-#     product = get_object_or_404(Product, pk=pk)
-#     content = {
-#         'title': title,
-#         'object': product
-#     }
-#     return render(request, 'adminapp/product_read.html', content)
-
-# модель Class Based Views(CBV) для деталей продукта
-class ProductDetailView(DetailView):
-    model = Product
-    template_name = 'adminapp/product_read.html'
-=======
 # @user_passes_test(lambda u: u.is_superuser)
 # def products(request, pk):
 #     title = 'админка/продукт'
@@ -432,15 +371,12 @@ class ProductCreateView(CreateView):
     model = Product
     form_class = ProductEditForm
     template_name = 'adminapp/product_update.html'
->>>>>>> lesson_9
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, *args, **kwargs):
         # метод dispatch отвечает за контроль авторизации, но только при @method_decorator(user_passes_test(...))
         return super().dispatch(*args, **kwargs)
 
-<<<<<<< HEAD
-=======
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = get_object_or_404(ProductCategory, pk=self.kwargs['pk'])
@@ -449,7 +385,6 @@ class ProductCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('adminapp:products', args=[self.kwargs['pk']])
->>>>>>> lesson_9
 
 # @user_passes_test(lambda u: u.is_superuser)
 # def product_update(request, pk):
@@ -475,13 +410,8 @@ class ProductCreateView(CreateView):
 #     return render(request, 'adminapp/product_update.html', content)
 
 # product_update
-<<<<<<< HEAD
-# модель Class Based Views(CBV) для редактирования продукта
-class ProductUpdateView(UpdateView):
-=======
 class ProductUpdateView(UpdateView):
     ''' Модель Class Based Views(CBV) для редактирования продукта'''
->>>>>>> lesson_9
     model = Product
     template_name = 'adminapp/product_update.html'
     # success_url = '/admin/categories/' - можно прописать так
@@ -491,8 +421,6 @@ class ProductUpdateView(UpdateView):
     # fields = '__all__'
     form_class = ProductEditForm
 
-<<<<<<< HEAD
-=======
     # dispatch
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, *args, **kwargs):
@@ -500,7 +428,6 @@ class ProductUpdateView(UpdateView):
         @method_decorator(user_passes_test(lambda u: u.is_superuser))'''
         return super().dispatch(*args, **kwargs)
 
->>>>>>> lesson_9
     # def get_queryset(self):
     #     return get_object_or_404(self.model, pk=self.kwargs['pk'])
     #
@@ -508,45 +435,23 @@ class ProductUpdateView(UpdateView):
     #     self.get_queryset()
 
     def get_context_data(self, **kwargs):
-<<<<<<< HEAD
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'продукт/редактирование'
-        context['category'] = self.get_object().category.pk
-=======
         '''Обработка контекста '''
         context = super().get_context_data(**kwargs)
         context['title'] = 'продукт/редактирование'
         category = get_object_or_404(ProductCategory, pk=self.object.category.pk)
         # context['category'] = self.get_object().category.pk
         context['category'] = category
->>>>>>> lesson_9
 
         return context
 
     def get_success_url(self):
         '''Возвращает на страницу продуктов'''
-<<<<<<< HEAD
-        # self.object = self.get_object()
-=======
         self.object = self.get_object()
->>>>>>> lesson_9
         # pk = self.get_object().category.pk
         # if self.object.is_active:
         #     return self.success_url
         # return reverse_lazy('adminapp:product_read', args=[self.object.pk])
         return reverse_lazy('adminapp:products', args=[self.object.category.pk])
-<<<<<<< HEAD
-        # return reverse_lazy('adminapp:product_read')
-        # return reverse_lazy('adminapp:products')
-
-    # def form_valid(self, form):
-
-    # dispatch
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, *args, **kwargs):
-        # метод dispatch отвечает за контроль авторизации, но только при
-        # @method_decorator(user_passes_test(lambda u: u.is_superuser))
-=======
         # return reverse_lazy('adminapp:products', args=[self.kwargs['pk']])
         # return reverse_lazy('adminapp:product_read')
         # return reverse_lazy('adminapp:products')
@@ -572,7 +477,6 @@ class ProductDetailView(DetailView):
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, *args, **kwargs):
         # метод dispatch отвечает за контроль авторизации, но только при @method_decorator(user_passes_test(...))
->>>>>>> lesson_9
         return super().dispatch(*args, **kwargs)
 
 
@@ -594,13 +498,8 @@ class ProductDetailView(DetailView):
 #     }
 #     return render(request, 'adminapp/product_delete.html', content)
 
-<<<<<<< HEAD
-# модель Class Based Views(CBV) для удаления товара
-class ProductDeleteView(DeleteView):
-=======
 class ProductDeleteView(DeleteView):
     ''' Модель Class Based Views(CBV) для удаления товара'''
->>>>>>> lesson_9
     model = Product
     template_name = 'adminapp/product_delete.html'
     success_url = reverse_lazy('adminapp:category_read')
@@ -608,14 +507,6 @@ class ProductDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         # if self.object(request.POST):
-<<<<<<< HEAD
-        if self.request.method == 'POST':
-            if self.object.is_active:
-                self.object.is_active = False
-            else:
-                self.object.is_active = True
-            self.object.save()
-=======
         # if self.request.method == 'POST':
         # if self.object.method == 'POST':-
         if self.object.is_active:
@@ -623,7 +514,6 @@ class ProductDeleteView(DeleteView):
         else:
             self.object.is_active = True
         self.object.save()
->>>>>>> lesson_9
         # self.object.is_active = False
         # self.object.save()
 
@@ -631,20 +521,12 @@ class ProductDeleteView(DeleteView):
 
     def get_success_url(self):
         '''Возвращает на страницу продуктов'''
-<<<<<<< HEAD
-        # self.object = self.get_object()
-=======
         self.object = self.get_object()
->>>>>>> lesson_9
         # pk = self.get_object().category.pk
         # if self.object.is_active:
         #     return self.success_url
         # return reverse_lazy('adminapp:product_read', args=[self.object.pk])
-<<<<<<< HEAD
-        return reverse_lazy('adminapp:products', args=[self.object.category.pk])
-=======
         return reverse('adminapp:products', args=[self.object.category.pk])
->>>>>>> lesson_9
         # return reverse_lazy('adminapp:product_read')
         # return reverse_lazy('adminapp:products')
 

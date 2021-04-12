@@ -9,17 +9,6 @@
            href="{% url 'adminapp:user_read' %}">пользователи</a>
     </li>
     <li>
-<<<<<<< HEAD
-{#                <a class = "{% if 'category' in request.resolver_match.url_name == 'categories' or category.name %}active{% endif %}"#}
-        <a class="{% if 'category' in request.resolver_match.url_name or 'product' in request.resolver_match.url_name %}active{% endif %}"
-           href="{% url 'adminapp:category_read' %}">
-            категории
-        {#         если есть шаблонная переменная переменная в adminapp/view.py 'category': category_item, то мы её вставляем #}
-        {% if category %}
-            : {{ category.name }}
-{#                            :<span>{{ object.category.name }}</span >#}
-        {% endif %}
-=======
         {#                <a class = "{% if 'category' in request.resolver_match.url_name == 'categories' or category.name %}active{% endif %}"#}
         <a class="{% if 'category' in request.resolver_match.url_name or 'product' in request.resolver_match.url_name %}active{% endif %}"
            href="{% url 'adminapp:category_read' %}">
@@ -29,7 +18,6 @@
                 : {{ category.name }}
                 {#                            :<span>{{ object.category.name }}</span >#}
             {% endif %}
->>>>>>> lesson_9
         </a>
 
     </li>
