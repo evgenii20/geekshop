@@ -1,6 +1,8 @@
 import datetime
 
 from django.db import transaction
+from django.db.models.signals import pre_save, pre_delete
+from django.dispatch import receiver
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -53,11 +55,13 @@ class OrderCreateView(CreateView):
                     # заполняем данными, для 5 корзин - 5 заказов
                     form.initial['product'] = basket_items[num].product
                     form.initial['quantity'] = basket_items[num].quantity
+                    # заполняем поле цена указанное в forms
+                    form.initial['price'] = basket_items[num].product.price
 
             else:
                 formset = OrderFormSet()
             # после заполнения и передачи на обработку нам эти данные не нужны, удаляем
-            basket_items.delete()
+            # basket_items.delete()
 
         # передаём formset дальше
         data['orderitems'] = formset
@@ -73,6 +77,8 @@ class OrderCreateView(CreateView):
         # если is_valid - false, orderitems не сохраняется
         # для избежания этого оборачиваем код в атомарную(не делима) транзакцию к БД
         with transaction.atomic():
+            # а тут delete() применяем к QuerySet с корзинами пользователя
+            Basket.get_items(self.request.user).delete()
             form.instance.user = self.request.user
             self.object = form.save()
             if orderitems.is_valid():
@@ -118,7 +124,10 @@ class OrderUpdateView(UpdateView):
         else:
             # data['orderitems'] = OrderFormSet(instance=self.object)
             formset = OrderFormSet(instance=self.object)
-
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
+            # data['orderitems'] = formset
         # передаём formset дальше
         data['orderitems'] = formset
         return data
@@ -159,3 +168,30 @@ def order_forming_complete(request, pk):
 
     return HttpResponseRedirect(reverse('ordersapp:orders_list'))
 
+# сигналы, можно на одну функцию 2 сигнала
+@receiver(pre_save, sender=Basket)
+@receiver(pre_save, sender=OrderItem)
+def product_quantity_update_save(sender, update_fields, instance, **kwargs):
+    '''Обновление при сохранении'''
+    # one случай
+    # если у нас поля которые были обновлены 'quantity' or 'product', то мы должны понять, это создание или обновление
+    # когда идёт pre_save мы ещё ничего не сохранили в базу, т.к. не сохранили у нас нет "pk" а запись находится
+    # в instance значит делаем проверку "if"
+    # if update_fields in  :
+    if update_fields is 'quantity' or 'product':
+        # default instance.pk = None
+        if instance.pk:
+            instance.product.quantity -= instance.quantity - sender.get_item(instance.pk).quantity
+        else:
+            # если продукт новый
+            instance.product.quantity -= instance.quantity
+        instance.product.save()
+
+
+@receiver(pre_delete, sender=Basket)
+@receiver(pre_delete, sender=OrderItem)
+def product_quantity_update_delete(sender, instance, **kwargs):
+    '''Обновление при удалении'''
+    # two случай
+    instance.product.quantity += instance.quantity
+    instance.product.save()

@@ -2,16 +2,35 @@ from django.conf import settings
 from django.db import models
 
 from mainapp.models import Product
+
+
 # Create your models here.
 # Второй шаг
 # Третий makemigrations
 # Четвёртый шаг migrate
 
+# # чтоб не пересекались с сигналами, комент
+# class BasketQuerySet(models.QuerySet):
+#     '''Менеджер объектов, для привязки к классу Basket необходимо указать
+#     objects = BasketQuerySet.as_manager()'''
+#
+#     def delete(self, *args, **kwargs):
+#         # Переопределяем метод delete, в self у нас лежит некий QuerySet(итерир-й объект) по которому мы можем пройтись
+#         for item in self:
+#             item.product.quantity += item.quantity
+#             item.product.save()
+#         # super(BasketQuerySet, self).delete(*args, **kwargs)
+#         # от родительского элемента удаление
+#         super().delete()
+
 
 class Basket(models.Model):
+    # привязка менеджера объектов
+    # objects = BasketQuerySet.as_manager()
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='basket')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity =models.PositiveSmallIntegerField(verbose_name='количество', default=0)
+    quantity = models.PositiveSmallIntegerField(verbose_name='количество', default=0)
     # auto_now_add=True - при создании объекта, записывается дата
     add_datetime = models.DateTimeField(auto_now_add=True, verbose_name='время')
 
@@ -32,9 +51,33 @@ class Basket(models.Model):
         _totalquantity = sum(list(map(lambda x: x.quantity, _items)))
         return _totalquantity
 
+    # total_quantity = property(_get_total_quantity)
+
     @property
     def total_cost(self):
+        # def get_total_cost(self):
         "return total cost for user"
         _items = Basket.objects.filter(user=self.user)
         _totalcost = sum(list(map(lambda x: x.product_cost, _items)))
         return _totalcost
+
+    @staticmethod
+    def get_items(user):
+        # передаём пользователя и получаем QuerySet 'product__category', к нему применяем метод delete в ordersapp views
+        return Basket.objects.filter(user=user).order_by('product__category')
+
+    @staticmethod
+    def get_product(user, product):
+        return Basket.objects.filter(user=user, product=product)
+
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.get(pk=pk)
+
+    # чтоб не пересекались с сигналами, комент
+    # def delete(self):
+    #     '''Метот относится к любому объекту в basket'''
+    #     # тут работаем с одним объектом
+    #     self.product.quantity += self.quantity
+    #     self.product.save()
+    #     super(self.__class__, self).delete()
