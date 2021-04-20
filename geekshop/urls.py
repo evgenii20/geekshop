@@ -38,13 +38,9 @@ urlpatterns = [
     # re_path(r'^admin/', include('adminapp.urls', namespace='admin'))
     path('admin/', include('adminapp.urls', namespace='admin')),
     # добавляем модуль "social_django"
-<<<<<<< HEAD
     path('', include('social_django.urls', namespace='social')),
     # re_path(r'^order/', include('ordersapp.urls', namespace='order')),
     path('order/', include('ordersapp.urls', namespace='order'))
-=======
-    path('', include('social_django.urls', namespace='social'))
->>>>>>> master
 ]
 
 # настройка работает локально

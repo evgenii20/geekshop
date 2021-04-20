@@ -15,7 +15,8 @@
                         <thead>
                         <tr>
                             {% for field in form.visible_fields %}
-                                <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
+                                {# <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">#}
+                                <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
                                     {{ field.label|capfirst }}
                                 </th>
                             {% endfor %}
@@ -23,9 +24,9 @@
                         </thead>
                     {% endif %}
                     <tr class="formset_row">
-                        {# выводим все видимые значения полей#}
+                        {# выводим все видимые значения полей внутри #}
                         {% for field in form.visible_fields %}
-                            <td class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
+                            <td class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
                                 {% if forloop.first %}
                                     {# выводим при первом проходе все поля, но уже от formset#}
                                     {% for hidden in form.hidden_fields %}
@@ -33,7 +34,16 @@
                                     {% endfor %}
                                 {% endif %}
                                 {{ field.errors.as_ul }}
-                                {{ field }}
+                                {% if field.name != 'price' %}
+                                    {{ field }}
+                                {% else %}
+                                    {% if field.value %}
+                                        {# class="orderitems-0-price" #}
+                                        <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">
+                                            {{ field.value }}
+                                        </span> руб
+                                    {% endif %}
+                                {% endif %}
                             </td>
                         {% endfor %}
                     </tr>

@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
@@ -6,6 +6,8 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic import UpdateView
 
 from basketapp.models import Basket
 from mainapp.models import Product
@@ -28,32 +30,82 @@ def basket(request):
 
 # Create
 # Update
-@login_required
-def basket_add(request, pk):
-    # reverse - преобразование записи namespace в обычный url, считаем что пользователь до авторизации пришёл
-    # со страницы товара и редиректим его на страницу продукта
-    # print(request.META.get('HTTP_REFERER'))
-    if 'login' in request.META.get('HTTP_REFERER'):
-        return HttpResponseRedirect(reverse('products:product', args=[pk]))
-    # Проверяем существующий товар, а не удалённый
-    # product_item = get_object_or_404(Product, pk=pk)
-    product = get_object_or_404(Product, pk=pk)
-    # basket_item = Basket.objects.filter(product=product_item, user=request.user).first()
-    # Анонимный пользователь не может использоваться как ключ и в нем нет ID, для авторизации пользователя
-    # используется специальный декоратор @login_required
-    basket = Basket.objects.filter(user=request.user, product=product).first()
-    # if not basket_item:
-    if not basket:
-        # basket_item = Basket(user=request.user, product=product_item)
-        basket = Basket(user=request.user, product=product)
+# @login_required
+# def basket_add(request, pk):
+#     # reverse - преобразование записи namespace в обычный url, считаем что пользователь до авторизации пришёл
+#     # со страницы товара и редиректим его на страницу продукта
+#     # print(request.META.get('HTTP_REFERER'))
+#     if 'login' in request.META.get('HTTP_REFERER'):
+#         return HttpResponseRedirect(reverse('products:product', args=[pk]))
+#     # Проверяем существующий товар, а не удалённый
+#     # product_item = get_object_or_404(Product, pk=pk)
+#     product = get_object_or_404(Product, pk=pk)
+#
+#     # basket_item = Basket.objects.filter(product=product_item, user=request.user).first()
+#     # Анонимный пользователь не может использоваться как ключ и в нем нет ID, для авторизации пользователя
+#     # используется специальный декоратор @login_required
+#     # вариант блока представлен в коде ниже
+#     ## basket = Basket.objects.filter(user=request.user, product=product).first()
+#     # # if not basket_item:
+#     # if not basket:
+#     #     # basket_item = Basket(user=request.user, product=product_item)
+#     #     basket = Basket(user=request.user, product=product)
+#     #
+#     # # basket_item.quantity += 1
+#     # basket.quantity += 1
+#     # # basket_item.save()
+#     # basket.save()
+#     # # HTTP_REFERER - адрес откуда пришёл пользователь
+#     # # print(request.META.get('HTTP_REFERER'))
+#     ## return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#     old_basket_item = Basket.get_product(user=request.user, product=product)
+#     if old_basket_item:
+#         old_basket_item[0].quantity += 1
+#         old_basket_item[0].save()
+#     else:
+#         new_basket_item = Basket(user=request.user, product=product)
+#         new_basket_item.quantity += 1
+#         # для django 3-й или выше версии с "update_fields=['quantity', 'product']", в др. случ. пусто ".save()"
+#         # new_basket_item.save(update_fields=['quantity', 'product'])
+#         new_basket_item.save()
+#
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    # basket_item.quantity += 1
-    basket.quantity += 1
-    # basket_item.save()
-    basket.save()
-    # HTTP_REFERER - адрес откуда пришёл пользователь
-    # print(request.META.get('HTTP_REFERER'))
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+# CBV
+# @login_required
+class BasketUpdateView(UpdateView):
+    model = Basket
+
+    # 1-метод получения
+    # def get_queryset(self):
+    #     # альтернатива строчке "old_basket_item = Basket.get_product(user=request.user, product=product)"
+    #     basket_item = Basket.objects.filter(user=self.request.user, product__pk=self.kwargs['pk']).first()
+    #     if not basket_item:
+    #         basket_item = Basket.objects.create(user=self.request.user, product__pk=self.kwargs['pk'])
+    #     return Basket.objects.filter(user=self.request.user, product__pk=self.kwargs['pk'])
+
+    # 2-метод получения
+    def get_object(self, **kwargs):
+        '''Получение object'''
+        # альтернатива строчке "old_basket_item = Basket.get_product(user=request.user, product=product)"
+        basket_item = Basket.objects.filter(user=self.request.user, product__pk=self.kwargs['pk']).first()
+        if not basket_item:
+            basket_item = Basket.objects.create(user=self.request.user, product__pk=self.kwargs['pk'])
+        basket_item.quantity += 1
+        basket_item.save()
+        return basket_item
+
+    def form_valid(self, form):
+        if 'login' in self.request.META.get('HTTP_REFERER'):
+            return HttpResponseRedirect(reverse('products:product', args=['pk']))
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, *args, **kwargs):
+        # метод dispatch отвечает за контроль авторизации, но только при
+        # @method_decorator(user_passes_test(lambda u: u.is_superuser))
+        return super().dispatch(*args, **kwargs)
+
 
 # Delete
 @login_required

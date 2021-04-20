@@ -14,12 +14,13 @@
     {% endblock %}
     {% block js %}
         <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-        {# <script src="{% static 'js/orders_script.js' %}"></script>#}
+        <script src="{% static 'js/jquery.formset.js' %}"></script>
+        <script src="{% static 'js/orders_script.js' %}"></script>
     {% endblock %}
 </head>
 <body>
 {#{% block menu %}#}
-    {#    {% include 'mainapp/includes/inc_menu.html' %}#}
+{#    {% include 'mainapp/includes/inc_menu.html' %}#}
 {#{% endblock %}#}
 <div class="order_container">
 

@@ -295,14 +295,14 @@ class ProductCategoryDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # if self.object(request.POST):
-        # if self.object.is_active:
-        #     self.object.is_active = False
-        # else:
-        #     self.object.is_active = True
+        if request.method == 'POST':
+            if self.object.is_active:
+                self.object.is_active = False
+            else:
+                self.object.is_active = True
         # self.object.save()
-        self.object.is_active = False
-        self.object.save()
+        # self.object.is_active = False
+            self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
 

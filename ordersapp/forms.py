@@ -18,6 +18,9 @@ class OrderForm(forms.ModelForm):
 
 
 class OrderItemForm(forms.ModelForm):
+    # расширяем поля. Ставим "required=False" чтоб форма не требовала заполнения поля
+    price = forms.CharField(label='Цена', required=False)
+
     class Meta:
         model = OrderItem
         exclude = ()

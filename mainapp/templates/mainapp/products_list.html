@@ -29,30 +29,33 @@
                 </h2>
 
             </div>
-            <div class="category-products clearfix">
-                <div class="pagination" align="center"><br>
-{#                    {% if products.has_previous %}#}
-{#                        <a href="{% url 'products:page' category.pk products.previous_page_number %}"> << </a>#}
-{#                    {% endif %}#}
-{#                    <span class="current">#}
-{#                        страница {{ products.number }} из {{ products.paginator.num_pages }}#}
-{#                    </span>#}
-{#                    {% if products.has_next %}#}
-{#                        <a href="{% url 'products:page' category.pk products.next_page_number %}"> >> </a>#}
-{#                    {% endif %}#}
+            {#            <div class="pagination" align="center"><br>#}
+            <div class="pagination">
+                {# {% if products.has_previous %}#}
+                {# <a href="{% url 'products:page' category.pk products.previous_page_number %}"> << </a>#}
+                {# {% endif %}#}
+                {# <span class="current">#}
+                {#  страница {{ products.number }} из {{ products.paginator.num_pages }}#}
+                {#  </span>#}
+                {# {% if products.has_next %}#}
+                {# <a href="{% url 'products:page' category.pk products.next_page_number %}"> >> </a>#}
+                {# {% endif %}#}
 
-                    {% if products.has_previous %}
-                        <a href="{% url 'products:category' category.pk %}?p={{ products.previous_page_number }}"> << </a>
-                    {% endif %}
-                    <span class="current">
+                {% if products.has_previous %}
+                    <a href="{% url 'products:category' category.pk %}?p={{ products.previous_page_number }}">
+                        << </a>
+                {% endif %}
+                <span class="current">
                         страница {{ products.number }} из {{ products.paginator.num_pages }}
                     </span>
-                    {% if products.has_next %}
-                        <a href="{% url 'products:category' category.pk %}?p={{ products.next_page_number }}"> >> </a>
-                    {% endif %}
-                    <br>
-                    <br>
-                </div>
+                {% if products.has_next %}
+                    <a href="{% url 'products:category' category.pk %}?p={{ products.next_page_number }}"> >> </a>
+                {% endif %}
+                {# <br>#}
+                {# <br>#}
+            </div>
+            <div class="category-products clearfix">
+
                 {% for product in products %}
                     <div class="block">
                         {# <a> добавление товара          #}
