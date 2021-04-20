@@ -17,6 +17,7 @@ class ProductCategory(models.Model):
         # '''Преобразование объекта к строке'''
         return self.name
 
+
 # Один ко многим. models подключается из django.db
 class Product(models.Model):
     # "on_delete=" - что делать при удалении? on_delete=models.SET_NULL, blank=True, null=True
@@ -35,3 +36,8 @@ class Product(models.Model):
     def __str__(self):
         # '''Строковое отображение'''
         return f'{self.name} ({self.category.name})'
+
+    @staticmethod
+    def get_items():
+        # '''Убираем неактивные продукты с формы'''
+        return Product.objects.filter(is_active=True).order_by('category', 'name')
