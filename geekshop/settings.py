@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import json
 import os
 from pathlib import Path
+
 # from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,9 +29,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'q5bl@^w%*ruj8y(xg1%ooud3trn1_7w!s6*il=uwy93ok6!i5h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True - оставить до завершения тестирования
 DEBUG = True
+# DEBUG = False
+
 # ALLOWED_HOSTS - Константа для сервера, при включеном "DEBAG = true", ['mysite.com'] не работает
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['*'] - можно оставить до окончания регистрации сервера, затем конкретный адрес
+ALLOWED_HOSTS = ['*']
+
+# ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 # Каждое приложение лучше регистрировать в начале работы с ним 'mainapp'.
@@ -91,9 +98,16 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    # подготовка к публикации в Интернете
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'geekshop',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'postgres'
+        # вход без пароля работает только локально в postgresql
     }
 }
 

@@ -25,12 +25,24 @@ window.onload = function () {
     }
     // console.log(quantity_arr);
     // console.log(price_arr);
-    if (!order_total_quantity) {
+    // if (!order_total_quantity) {
+    //     for (var i = 0; i < TOTAL_FORMS; i++) {
+    //         order_total_quantity += quantity_arr[i];
+    //         order_total_cost += quantity_arr[i] * price_arr[i];
+    //     }
+    //
+    //     $('.order_total_quantity').html(order_total_quantity.toString());
+    //     $('.order_total_cost').html(Number(order_total_cost.toFixed(2)).toString());
+    // }
+
+    function orderSummaryRecalc() {
+        order_total_quantity = 0;
+        order_total_cost = 0;
+
         for (var i = 0; i < TOTAL_FORMS; i++) {
             order_total_quantity += quantity_arr[i];
             order_total_cost += quantity_arr[i] * price_arr[i];
         }
-
         $('.order_total_quantity').html(order_total_quantity.toString());
         $('.order_total_cost').html(Number(order_total_cost.toFixed(2)).toString());
     }
@@ -68,7 +80,7 @@ window.onload = function () {
         }
         orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
     });
-    
+
     // function orderSummaryUpdate(orderitem_price, delta_quantity) {
     function orderSummaryUpdate(orderitem_num, delta_quantity) {
         delta_cost = orderitem_num * delta_quantity;
@@ -80,19 +92,57 @@ window.onload = function () {
         $('.order_total_quantity').html(order_total_quantity.toString());
     }
 
-    function deleteOrderItem(row){
+    function deleteOrderItem(row) {
         var target_name = row[0].querySelector('input[type=number]').name;
         // orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-DELETE', ''));
         orderitem_num = parseInt(target_name.replace('orderitems-', '').replace('-quantity', ''));
         // однозначное удаление строки
         delta_quantity = -quantity_arr[orderitem_num];
+        quantity_arr[orderitem_num] = 0;
         // обновление записи
-        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
+        if (!isNaN(price_arr[orderitem_num]) && !isNaN(delta_quantity)) {
+            orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
+        }
     }
 
+    // обработка выбранного продукта
     $('.order_form select').change(function () {
+        // отслеживание событий не часто изменяемого селектора ".order_form" или "document", но селектор "select" - д.б. конкретный
+        // $('.order_form').on('change', 'select', function () {
+        // выборка по событию
         var target = event.target;
-        console.log(target);
+        // console.log(target);
+        // асинхронное обновление выбранного товара
+        orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
+        var orderitem_product_pk = target.options[target.selectedIndex].value;
+
+        if (orderitem_product_pk) {
+            $.ajax({
+                url: "/order/product/" + orderitem_product_pk + "/price/",
+                success: function (data) {
+                    if (data.price) {
+                        // пишем в общий массив цен
+                        price_arr[orderitem_num] = parseFloat(data.price);
+                        // при выборе нового продукта добовляет "0" в количество
+                        if (isNaN(quantity_arr[orderitem_num])) {
+                            quantity_arr[orderitem_num] = 0;
+                        }
+                        // заменяем пустой "span" на новый с подгруженной ценой продукта
+                        var price_html = '<span>' + data.price.toString().replace('.', ',') + '</span> руб.';
+                        // вывод в документе
+                        var current_tr = $('.order_form table').find('tr:eq(' + (orderitem_num + 1) + ')');
+                        current_tr.find('td:eq(2)').html(price_html);
+
+                        if (isNaN(current_tr.find('input[type="number"]').val(0))) {
+                            current_tr.find('input[type="number"]').val(0);
+                        }
+                        orderSummaryRecalc();
+                    }
+
+                }
+            });
+        }
+
     });
 
     // вызов селектора с формсетами. JQuery FormSet
@@ -102,7 +152,6 @@ window.onload = function () {
         prefix: 'orderitems',
         removed: deleteOrderItem
     });
-
 
 
 }
