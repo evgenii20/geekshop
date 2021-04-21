@@ -35,7 +35,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS - Константа для сервера, при включеном "DEBAG = true", ['mysite.com'] не работает
 # ALLOWED_HOSTS = ['*'] - можно оставить до окончания регистрации сервера, затем конкретный адрес
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['194.67.116.2']
 
 # ALLOWED_HOSTS = ['127.0.0.1']
 
