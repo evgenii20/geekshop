@@ -35,6 +35,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS - Константа для сервера, при включеном "DEBAG = true", ['mysite.com'] не работает
 # ALLOWED_HOSTS = ['*'] - можно оставить до окончания регистрации сервера, затем конкретный адрес
+# ALLOWED_HOSTS = ['194.67.116.2']
 ALLOWED_HOSTS = ['*']
 
 # ALLOWED_HOSTS = ['127.0.0.1']
@@ -207,7 +208,10 @@ LOGIN_URL = '/auth/login/'
 # тест отправки сообщений
 # DOMAIN_NAME = 'http://localhost:8000'
 # BASE_URL = 'http://localhost:8000'
-BASE_URL = 'http://localhost:8000'
+# локально
+# BASE_URL = 'http://ALLOWED_HOSTS:8000'
+# для сервера
+BASE_URL = 'http://ALLOWED_HOSTS'
 
 # EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST = 'localhost'
