@@ -19,7 +19,6 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from mainapp import views as mainapp
 
-
 urlpatterns = [
     path('', mainapp.main, name='main'),
     # path('products/', mainapp.products, name='products'),
@@ -46,3 +45,9 @@ urlpatterns = [
 # настройка работает локально
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# подгрузка toolbar
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [re_path(r'^__debug__/', include(debug_toolbar.urls))]
