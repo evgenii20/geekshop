@@ -3,3 +3,4 @@ tmp
 geekshop/vk.json
 .env
 .idea
+__pycache__
