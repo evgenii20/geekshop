@@ -108,8 +108,6 @@ if DEBUG:
         'template_profiler_panel.panels.template.TemplateProfilerPanel',
     ]
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 ROOT_URLCONF = 'geekshop.urls'
 
 TEMPLATES = [
@@ -139,17 +137,17 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-    # подготовка к публикации в Интернете
     # 'default': {
-    #     'NAME': 'geekshop',
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'USER': 'postgres'
-    #     # вход без пароля работает только локально в postgresql
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
+    # подготовка к публикации в Интернете
+    'default': {
+        'NAME': 'geekshop',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'postgres'
+        # вход без пароля работает только локально в postgresql
+    }
 }
 
 # Password validation
@@ -186,13 +184,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+# для сервера, обозначает где лежит статика
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATIC_URL = '/static/'
 
 # os.path.join(BASE_DIR / 'static'),
 # STATICFILES_DIRS - на проде игнарируется, все пути прописывать полные, так же касается 'media'
+# STATICFILES_DIRS - используется только для локальной разработки, конфликтует с STATIC_ROOT (с 81 стр.)
 STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
+
 
 # Подключаем папку в которой хранятся файлы пользователя
 MEDIA_URL = '/media/'
@@ -220,6 +223,7 @@ EMAIL_HOST_USER = 'django@gb.local'
 EMAIL_HOST_PASSWORD = 'geekshop'
 # EMAIL_USE_SSL = True
 EMAIL_USE_SSL = False
+# EMAIL_USE_TLS = False
 
 # вариант Python
 # При локальной настройке команды ниже не используются
@@ -256,8 +260,10 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.create_user',
-    'authapp.pipeline.save_user_profile',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
+
+    'authapp.pipeline.save_user_profile',
 )
+
