@@ -26,9 +26,9 @@ class OrderListView(ListView):
         '''Фильтруем заказы по текущему пользователю'''
         return Order.objects.filter(user=self.request.user)
 
-    @method_decorator(login_required())
-    def dispatch(self, *args, **kwargs):
-        return super(ListView, self).dispatch(*args, **kwargs)
+    # @method_decorator(login_required())
+    # def dispatch(self, *args, **kwargs):
+    #     return super(ListView, self).dispatch(*args, **kwargs)
 
 
 # OrderItemsCreate

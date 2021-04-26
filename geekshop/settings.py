@@ -139,17 +139,17 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-    # подготовка к публикации в Интернете
     # 'default': {
-    #     'NAME': 'geekshop',
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'USER': 'postgres'
-    #     # вход без пароля работает только локально в postgresql
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
+    # подготовка к публикации в Интернете
+    'default': {
+        'NAME': 'geekshop',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'postgres'
+        # вход без пароля работает только локально в postgresql
+    }
 }
 
 # Password validation
