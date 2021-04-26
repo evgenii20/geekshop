@@ -442,9 +442,11 @@ html, body {
 
 .basket_list input[type="number"] {
     width: 3em;
-    position: relative;
+    /*position: relative;
     display: block;
-    float: left;
+    float: left;*/
+	display: flex;
+	margin: 1em;
 }
 
 .basket_list span.category_name {
@@ -494,6 +496,7 @@ html, body {
     float: none;
 	display: flex;
 	padding: 5px;
+	align-items: center;
 }
 .basket_record_img{
 	/*width: 30%;*/

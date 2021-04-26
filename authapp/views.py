@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -10,7 +11,7 @@ from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditF
 # Create your views here.
 from authapp.models import ShopUser
 
-
+#@csrf_exempt
 def login(request):
     title = 'вход'
     # POST - при отправке форм, авторизации
@@ -74,7 +75,7 @@ def register(request):
     }
     return render(request, 'authapp/register.html', content)
 
-
+@login_required
 def edit(request):
     title = 'редактирование'
     if request.method == 'POST':
