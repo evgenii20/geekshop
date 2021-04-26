@@ -75,7 +75,7 @@ def register(request):
     }
     return render(request, 'authapp/register.html', content)
 
-@login_required
+#@login_required
 def edit(request):
     title = 'редактирование'
     if request.method == 'POST':

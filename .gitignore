@@ -3,6 +3,9 @@ tmp
 geekshop/vk.json
 .env
 .idea
+authapp/__pycache__
+geekshop/__pycache__
+mainapp/__pycache__
+ordersapp/__pycache__
 __pycache__
-./__pycache__
 .idea
