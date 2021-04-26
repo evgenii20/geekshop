@@ -4,3 +4,5 @@ geekshop/vk.json
 .env
 .idea
 __pycache__
+./__pycache__
+.idea
