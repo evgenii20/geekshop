@@ -1,5 +1,6 @@
 from django import forms
 
+from mainapp.models import Product
 from ordersapp.models import Order, OrderItem
 
 
@@ -33,3 +34,4 @@ class OrderItemForm(forms.ModelForm):
             field.help_text = ''
         # Убираем неактивные продукты с формы
         # self.fields['product'].queryset = Product.get_items()
+        self.fields['product'].queryset = Product.get_items().select_related()
