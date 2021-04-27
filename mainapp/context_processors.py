@@ -8,7 +8,7 @@ def basket(request):
         # basket_list = Basket.objects.filter(user=request.user)
         # basket_list = Basket.objects.filter(user=request.user).order_by('product__category')
         # basket = Basket.get_item(request.user)
-        # .select_related() - ускоряет получение данных
+        # .select_related() - ускоряет получение данных, вытягивая внешние ключи
         basket_list = Basket.objects.filter(user=request.user).select_related()
         # basket_list = Basket.objects.filter(user=request.user)
     return {

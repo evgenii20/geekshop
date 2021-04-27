@@ -32,6 +32,7 @@ class Product(models.Model):
     price = models.DecimalField(verbose_name='цена', max_digits=8, decimal_places=2, default=0)
     quantity = models.PositiveSmallIntegerField(verbose_name='количество на складе', default=0)
     is_active = models.BooleanField(verbose_name='активность', default=True)
+    # is_active = models.BooleanField(db_index=True, verbose_name='активность', default=True)
 
     def __str__(self):
         # '''Строковое отображение'''

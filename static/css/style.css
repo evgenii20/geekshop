@@ -437,7 +437,8 @@ html, body {
 
 .basket_container {
     margin: 25px auto;
-    width: 700px;
+    /*width: 700px;*/
+	width: 800px;
 }
 
 .basket_list input[type="number"] {
@@ -446,7 +447,7 @@ html, body {
     display: block;
     float: left;*/
 	display: flex;
-	margin: 1em;
+	/*margin: 1em;*/
 }
 
 .basket_list span.category_name {
