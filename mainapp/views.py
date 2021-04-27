@@ -59,15 +59,15 @@ def products(request, pk=None):
     # только для продукта
     title = 'Продукты'
     # links_menu = ProductCategory.objects.all()
-    # is_active=True - не показывать скрытые
-    links_menu = ProductCategory.objects.filter(is_active=True).select_related()
+    # is_active=True - не показывать скрытые, .select_related()
+    links_menu = ProductCategory.objects.filter(is_active=True)
 
     page = request.GET.get('p', 1)
 
     if pk is not None:
         if pk == 0:
             # products = Product.objects.all().order_by('price')
-            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price').select_related()
+            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
             # категория товара на странице продукта
             # category_item = {'name': 'все', 'pk': 0}
             category = {'name': 'все', 'pk': 0}
@@ -75,7 +75,7 @@ def products(request, pk=None):
             category = get_object_or_404(ProductCategory, pk=pk)
             # если не 404, то выбираем объекты
             products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).\
-                order_by('price').select_related()
+                order_by('price')
             # products_list = Product.objects.filter(category=
 
         # постраничный вывод
