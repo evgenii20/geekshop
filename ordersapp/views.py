@@ -24,7 +24,7 @@ class OrderListView(ListView):
 
     def get_queryset(self):
         '''Фильтруем заказы по текущему пользователю'''
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user).select_related()
 
     # @method_decorator(login_required())
     # def dispatch(self, *args, **kwargs):
@@ -52,7 +52,7 @@ class OrderCreateView(CreateView):
             # Если else, собираем formset пустой
             # basket_items = Basket.get_items(self.request.user)
             # Выбираем все корзины пользователя
-            basket_items = Basket.objects.filter(user=self.request.user)
+            basket_items = Basket.objects.filter(user=self.request.user).select_related()
             if len(basket_items):
                 # Переносим в заказ, extra=len(basket_items)
                 OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=len(basket_items))
