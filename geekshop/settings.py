@@ -219,13 +219,13 @@ LOGIN_URL = '/auth/login/'
 BASE_URL = 'http://ALLOWED_HOSTS:8000'
 
 # EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '25'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = '2525'
 EMAIL_HOST_USER = 'django@gb.local'
 EMAIL_HOST_PASSWORD = 'geekshop'
 # EMAIL_USE_SSL = True
 EMAIL_USE_SSL = False
-# EMAIL_USE_TLS = False
+EMAIL_USE_TLS = True
 
 # вариант Python
 # При локальной настройке команды ниже не используются
