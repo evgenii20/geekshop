@@ -28,7 +28,7 @@ def load_from_json(file_name):
 def get_hot_product():
     "горячее предложение"
     # products = Product.objects.all()
-    products = Product.objects.filter(is_active=True, category__is_active=True)
+    products = Product.objects.filter(is_active=True, category__is_active=True).select_related()
     # возврат 1 случайного продукта из списка
     return random.sample(list(products), 1)[0]
 
@@ -43,7 +43,7 @@ def get_same_products(hot_product):
 def main(request):
     title = 'Главная'
     # products = Product.objects.all()[:3]
-    products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')[:3]
+    products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category').select_related()[:3]
     # products = Product.objects.filter(is_active=True, category__is_active=True)[:3]
 
     content = {
@@ -60,14 +60,14 @@ def products(request, pk=None):
     title = 'Продукты'
     # links_menu = ProductCategory.objects.all()
     # is_active=True - не показывать скрытые, .select_related()
-    links_menu = ProductCategory.objects.filter(is_active=True)
+    links_menu = ProductCategory.objects.filter(is_active=True).select_related()
 
     page = request.GET.get('p', 1)
 
     if pk is not None:
         if pk == 0:
             # products = Product.objects.all().order_by('price')
-            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price').select_related()
             # категория товара на странице продукта
             # category_item = {'name': 'все', 'pk': 0}
             category = {'name': 'все', 'pk': 0}
@@ -121,7 +121,7 @@ def product(request, pk):
         'title': title,
         # QuerySet
         # 'links_menu': ProductCategory.objects.all(),
-        'links_menu': ProductCategory.objects.filter(is_active=True),
+        'links_menu': ProductCategory.objects.filter(is_active=True).select_related(),
         'product': get_object_or_404(Product, pk=pk),
     }
     return render(request, 'mainapp/product.html', content)
