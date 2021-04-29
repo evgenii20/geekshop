@@ -11,7 +11,8 @@ class ProductCategory(models.Model):
     # описание, если blank=True, то это поле может оставаться пустым и оно не обязательное
     description = models.TextField(verbose_name='описание', blank=True)
     # флаг удаления, не удаляя полностью
-    is_active = models.BooleanField(verbose_name='активность', default=True)
+    # is_active = models.BooleanField(verbose_name='активность', default=True)
+    is_active = models.BooleanField(db_index=True, verbose_name='активность', default=True)
 
     def __str__(self):
         # '''Преобразование объекта к строке'''
@@ -31,7 +32,7 @@ class Product(models.Model):
     # "max_digits=8" - кол-во знаков до ",", "decimal_places=2" - после
     price = models.DecimalField(verbose_name='цена', max_digits=8, decimal_places=2, default=0)
     quantity = models.PositiveSmallIntegerField(verbose_name='количество на складе', default=0)
-    is_active = models.BooleanField(verbose_name='активность', default=True)
+    is_active = models.BooleanField(db_index=True, verbose_name='активность', default=True)
     # is_active = models.BooleanField(db_index=True, verbose_name='активность', default=True)
 
     def __str__(self):

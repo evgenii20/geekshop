@@ -20,7 +20,7 @@ from mainapp.models import Product
 def basket(request):
     title = 'Корзина'
     # отсортированные корзинки пользователя по категории продукта
-    basket_items = Basket.objects.filter(user=request.user).order_by('product__category')
+    basket_items = Basket.objects.filter(user=request.user).order_by('product__category').select_related()
 
     content = {
         'title': title,
@@ -58,7 +58,7 @@ def basket_add(request, pk):
     # # HTTP_REFERER - адрес откуда пришёл пользователь
     # # print(request.META.get('HTTP_REFERER'))
     ## return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    old_basket_item = Basket.get_product(user=request.user, product=product)
+    old_basket_item = Basket.get_product(user=request.user, product=product).select_related()
     if old_basket_item:
         old_basket_item[0].quantity += 1
         old_basket_item[0].save()
@@ -129,7 +129,7 @@ def basket_edit(request, pk, quantity):
             # Если количество товара стало равно нулю — удаляем его из корзины.
             new_basket_item.delete()
 
-        basket_items = Basket.objects.filter(user=request.user).order_by('product__category')
+        basket_items = Basket.objects.filter(user=request.user).order_by('product__category').select_related()
 
         content = {
             'basket_items': basket_items,

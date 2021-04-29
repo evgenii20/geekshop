@@ -32,7 +32,7 @@ class Order(models.Model):
     # choices - выбор, max_length=3 - это PROCEEDED = 'PRD'
     status = models.CharField(verbose_name='статус', max_length=3, choices=ORDER_STATUS_CHOICES, default=FORMING)
     # флаг удаления, по умолчанию активен
-    is_active = models.BooleanField(verbose_name='активен', default=True)
+    is_active = models.BooleanField(db_index=True, verbose_name='активен', default=True)
 
     class Meta:
         # сортировка для CBV, по умолчанию от более новых к старым заказам (кортеж,):
