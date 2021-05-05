@@ -65,6 +65,8 @@ INSTALLED_APPS = [
 ]
 # Промежуточный слой, срабатывает до начала работы контроллера
 MIDDLEWARE = [
+    # 'django.middleware.cache.UpdateCacheMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -76,6 +78,8 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 # INTERNAL_IPS = ['127.0.0.1']
@@ -86,6 +90,7 @@ if DEBUG:
     def show_toolbar(request):
         '''Возврат статуса для toolbara, default = False, return True'''
         return True
+
 
     DEBUG_TOOLBAR_CONFIG = {
         # прописываем ссылку на функцию
@@ -134,6 +139,31 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'geekshop.wsgi.application'
+
+# ---- cache
+# if os.name == 'posix':
+# ссылка на алиас
+CACHE_MIDDLEWARE_ALIAS = 'default'
+# Длительность хранения данных в кеше
+CACHE_MIDDLEWARE_SECONDS = 120
+# разделяем несколько проектов по префиксу
+CACHE_MIDDLEWARE_KEY_PREFIX = 'geekshop'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        # локал
+        'LOCATION': '127.0.0.1:11211',
+        # для сервера:
+        # 'LOCATION': '194.67.116.2:11211',
+    }
+}
+
+# На основе этого флага будем выбирать cache позволит включать или
+# выключать низкоуровневое кеширование в проекте
+LOW_CACHE = True
+# LOW_CACHE = False
+
+# ----/cache
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -198,7 +228,6 @@ STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
 
-
 # Подключаем папку в которой хранятся файлы пользователя
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -215,8 +244,8 @@ LOGIN_URL = '/auth/login/'
 # BASE_URL = 'http://localhost:8000'
 # локально
 # BASE_URL = 'http://ALLOWED_HOSTS:8000'
-# для сервера
-BASE_URL = 'http://ALLOWED_HOSTS:8000'
+# для сервера конкретный IP
+BASE_URL = 'http://194.67.116.2:8000'
 
 # EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST = 'smtp.yandex.ru'
@@ -232,8 +261,10 @@ EMAIL_USE_SSL = True
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 
 # вариант логирования сообщений почты в виде файлов вместо отправки
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = 'tmp/email-messages/'
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = 'tmp/email-messages/'
+# Вариант отправки для сервера
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -268,4 +299,3 @@ SOCIAL_AUTH_PIPELINE = (
 
     'authapp.pipeline.save_user_profile',
 )
-

@@ -14,7 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import path, re_path
+from django.views.decorators.cache import cache_page
+
 import mainapp.views as mainapp
 
 app_name = 'mainapp'
@@ -22,12 +24,31 @@ app_name = 'mainapp'
 urlpatterns = [
     # path('', mainapp.products, name='products'),
     path('', mainapp.products, name='index'),
+    # re_path(r'^$', mainapp.products, name='index'),
     # используем для подгрузки категорий "<int:pk>/"
     # path('<int:pk>/', mainapp.products, name='category'),
+
     path('category/<int:pk>/', mainapp.products, name='category'),
+
+    # re_path(r'^category/(?P<pk>\d+)/$', mainapp.products, name='category'),
+    # третий уровень кеширования
+
+    # re_path(r'^category/(?P<pk>\d+)/$', cache_page(3600)(mainapp.products)),
+
+    # re_path(r'^category/(?P<pk>\d+)/ajax/$', cache_page(3600)(mainapp.products_ajax)),
+
     # один из вариантов написания передачи "page"
     # path('category/<int:pk>/<int:page>', mainapp.products, name='category'),
     # path('category/<int:pk>/<int:page>', mainapp.products, name='page'),
+
+    # re_path(r'^category/(?P<pk>\d+)/page/(?P<page>\d+)/$', mainapp.product, name='page'),
+
+    # re_path(r'^category/(?P<pk>\d+)/page/(?P<page>\d+)/ajax/$', cache_page(3600)(mainapp.products_ajax)),
+
     # path('<int:pk>/', mainapp.products, name='category'),
     path('product/<int:pk>/', mainapp.product, name='product'),
+    # re_path(r'^product/(?P<pk>\d+)/$', mainapp.product, name='product'),
+
+    # re_path(r'^category/(?P<pk>\d+)/$', mainapp.product, name='product'),
+
 ]
