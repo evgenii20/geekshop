@@ -194,7 +194,7 @@ def product_quantity_update_save(sender, update_fields, instance, **kwargs):
             instance.product.quantity -= instance.quantity
         instance.product.save()
 
-
+# сигналы
 @receiver(pre_delete, sender=Basket)
 @receiver(pre_delete, sender=OrderItem)
 def product_quantity_update_delete(sender, instance, **kwargs):
