@@ -1,4 +1,8 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.db import connection
+from django.db.models import F
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
@@ -137,6 +141,7 @@ def user_delete(request, pk):
 class ProductCategoriesListView(ListView):
     model = ProductCategory
     template_name = 'adminapp/categories.html'
+
     # template_name = 'adminapp/category_update.html'
     # success_url = reverse_lazy('adminapp:product_read')
     # object_list = ProductCategory.objects.all().order_by('-is_active')
@@ -249,6 +254,19 @@ class ProductCategoryUpdateView(UpdateView):
         context['title'] = 'категории/редактирование'
 
         return context
+
+    def form_valid(self, form):
+        # это не совсем правильный пример с т.з. бизнес логики нельзя просто взять и переписать все цены
+        # для этого лучше использовать поле в модельке
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                print(f'применяется скидка {discount}% к товарам категории {self.object.name}')
+                self.object.product_set.update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+
+        return super().form_valid(form)
+
     #
     # def get_success_url(self):
     #     self.object = self.get_object()
@@ -300,8 +318,8 @@ class ProductCategoryDeleteView(DeleteView):
                 self.object.is_active = False
             else:
                 self.object.is_active = True
-        # self.object.save()
-        # self.object.is_active = False
+            # self.object.save()
+            # self.object.is_active = False
             self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
@@ -385,6 +403,7 @@ class ProductCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('adminapp:products', args=[self.kwargs['pk']])
+
 
 # @user_passes_test(lambda u: u.is_superuser)
 # def product_update(request, pk):
@@ -534,3 +553,21 @@ class ProductDeleteView(DeleteView):
     def dispatch(self, *args, **kwargs):
         # метод dispatch отвечает за контроль авторизации, но только при @method_decorator(user_passes_test(...))
         return super().dispatch(*args, **kwargs)
+
+
+# обновление атрибута нескольких объектов при помощи «.update()»
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}:')
+    [print(query['sql']) for query in update_queries]
+
+
+@receiver(pre_save, sender=ProductCategory)
+def product_is_active_update_productcategory_save(sender, instance, **kwargs):
+    if instance.pk:
+        if instance.is_active:
+            instance.product_set.update(is_active=True)
+        else:
+            instance.product_set.update(is_active=False)
+
+        db_profile_by_type(sender, 'UPDATE', connection.queries)

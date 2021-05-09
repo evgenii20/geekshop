@@ -14,9 +14,14 @@ class ShopUserAdminEditForm(ShopUserEditForm):
 
 
 class ProductCategoryEditForm(forms.ModelForm):
+    # добавление дополнительного поля при редактировании категории в админке, initial=0 - по умолчанию
+    discount = forms.IntegerField(label='скидка', required=False, min_value=0, max_value=90, initial=0)
+
     class Meta:
         model = ProductCategory
-        fields = '__all__'
+        # Вместо атрибута разрешенных полей «fields» задаем «exclude» - кортеж с исключенными из отображения полями.
+        # fields = '__all__'
+        exclude = ()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -123,6 +123,7 @@ def get_hot_product():
     "горячее предложение"
     # products = Product.objects.all()
     products = Product.objects.filter(is_active=True, category__is_active=True).select_related()
+    # products = Product.objects.filter(category__is_active=True).select_related()
     # возврат 1 случайного продукта из списка
     return random.sample(list(products), 1)[0]
 
@@ -153,7 +154,7 @@ def main(request):
 
 
 # @never_cache
-@cache_page(3600)
+# @cache_page(3600)
 def products(request, pk=None):
     # def products(request, pk=None, page=1):
     # только для продукта

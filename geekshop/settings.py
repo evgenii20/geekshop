@@ -57,8 +57,8 @@ INSTALLED_APPS = [
     'social_django',
     'ordersapp',
 
-    'debug_toolbar',
-    'template_profiler_panel',
+    # 'debug_toolbar',
+    # 'template_profiler_panel',
 
     'django_extensions',
 
@@ -77,7 +77,7 @@ MIDDLEWARE = [
 
     'social_django.middleware.SocialAuthExceptionMiddleware',
 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
@@ -86,34 +86,34 @@ MIDDLEWARE = [
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-if DEBUG:
-    def show_toolbar(request):
-        '''Возврат статуса для toolbara, default = False, return True'''
-        return True
-
-
-    DEBUG_TOOLBAR_CONFIG = {
-        # прописываем ссылку на функцию
-        'SHOW_TOOLBAR_CALLBACK': show_toolbar,
-    }
-
-    DEBUG_TOOLBAR_PANELS = [
-        # 'ddt_request_history.panels.request_history.RequestHistoryPanel',
-        'debug_toolbar.panels.versions.VersionsPanel',
-        'debug_toolbar.panels.timer.TimerPanel',
-        'debug_toolbar.panels.settings.SettingsPanel',
-        'debug_toolbar.panels.headers.HeadersPanel',
-        'debug_toolbar.panels.request.RequestPanel',
-        'debug_toolbar.panels.sql.SQLPanel',
-        'debug_toolbar.panels.templates.TemplatesPanel',
-        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-        'debug_toolbar.panels.cache.CachePanel',
-        'debug_toolbar.panels.signals.SignalsPanel',
-        'debug_toolbar.panels.logging.LoggingPanel',
-        'debug_toolbar.panels.redirects.RedirectsPanel',
-        'debug_toolbar.panels.profiling.ProfilingPanel',
-        'template_profiler_panel.panels.template.TemplateProfilerPanel',
-    ]
+# if DEBUG:
+#     def show_toolbar(request):
+#         '''Возврат статуса для toolbara, default = False, return True'''
+#         return True
+#
+#
+#     DEBUG_TOOLBAR_CONFIG = {
+#         # прописываем ссылку на функцию
+#         'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+#     }
+#
+#     DEBUG_TOOLBAR_PANELS = [
+#         # 'ddt_request_history.panels.request_history.RequestHistoryPanel',
+#         'debug_toolbar.panels.versions.VersionsPanel',
+#         'debug_toolbar.panels.timer.TimerPanel',
+#         'debug_toolbar.panels.settings.SettingsPanel',
+#         'debug_toolbar.panels.headers.HeadersPanel',
+#         'debug_toolbar.panels.request.RequestPanel',
+#         'debug_toolbar.panels.sql.SQLPanel',
+#         'debug_toolbar.panels.templates.TemplatesPanel',
+#         'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+#         'debug_toolbar.panels.cache.CachePanel',
+#         'debug_toolbar.panels.signals.SignalsPanel',
+#         'debug_toolbar.panels.logging.LoggingPanel',
+#         'debug_toolbar.panels.redirects.RedirectsPanel',
+#         'debug_toolbar.panels.profiling.ProfilingPanel',
+#         'template_profiler_panel.panels.template.TemplateProfilerPanel',
+#     ]
 
 ROOT_URLCONF = 'geekshop.urls'
 
@@ -169,17 +169,17 @@ LOW_CACHE = True
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
+    #}
     # подготовка к публикации в Интернете
-    'default': {
-        'NAME': 'geekshop',
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'postgres'
-        # вход без пароля работает только локально в postgresql
-    }
+     'default': {
+         'NAME': 'geekshop',
+         'ENGINE': 'django.db.backends.postgresql',
+         'USER': 'postgres'
+         # вход без пароля работает только локально в postgresql
+     }
 }
 
 # Password validation
@@ -240,7 +240,7 @@ AUTH_USER_MODEL = 'authapp.ShopUser'
 LOGIN_URL = '/auth/login/'
 
 # тест отправки сообщений
-# DOMAIN_NAME = 'http://localhost:8000'
+DOMAIN_NAME = 'http://localhost:8000'
 # BASE_URL = 'http://localhost:8000'
 # локально
 # BASE_URL = 'http://ALLOWED_HOSTS:8000'
