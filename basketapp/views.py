@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db import connection
+from django.db.models import F
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
@@ -58,10 +60,16 @@ def basket_add(request, pk):
     # # HTTP_REFERER - адрес откуда пришёл пользователь
     # # print(request.META.get('HTTP_REFERER'))
     ## return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
     old_basket_item = Basket.get_product(user=request.user, product=product).select_related()
+    # old_basket_item = Basket.get_product(user=request.user, product=product).first()
     if old_basket_item:
-        old_basket_item[0].quantity += 1
+        # old_basket_item[0].quantity += 1
+        old_basket_item[0].quantity = F('quantity') + 1
         old_basket_item[0].save()
+
+        update_queries = list(filter(lambda x: 'UPDATE' in x['sql'], connection.queries))
+        print(f'query basket_add: {update_queries}')
     else:
         new_basket_item = Basket(user=request.user, product=product)
         new_basket_item.quantity += 1

@@ -11,7 +11,8 @@ from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditF
 # Create your views here.
 from authapp.models import ShopUser
 
-#@csrf_exempt
+
+# @csrf_exempt
 def login(request):
     title = 'вход'
     # POST - при отправке форм, авторизации
@@ -75,7 +76,8 @@ def register(request):
     }
     return render(request, 'authapp/register.html', content)
 
-#@login_required
+
+# @login_required
 def edit(request):
     title = 'редактирование'
     if request.method == 'POST':
@@ -99,6 +101,7 @@ def edit(request):
     }
     return render(request, 'authapp/edit.html', content)
 
+
 def send_verify_email(user):
     verify_link = reverse('auth:verify', args=[user.email, user.activation_key])
 
@@ -115,14 +118,33 @@ def send_verify_email(user):
     #          Тема             сообщение   от кого               кому список   флаг ошибки
     return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=True)
 
+
+# def veryfy(request, email, activation_key):
+#     user = ShopUser.objects.get(email=email)
+#     if user.activation_key == activation_key and not user.is_activation_key_expired():
+#         user.is_active = True
+#         # для запрета повторных активаций пользователя "user.activation_key = ''"
+#         user.activation_key = ''
+#         user.save()
+#         # Если с пользователем всё хорошо, то логиним, если нет, то анонимный пользователь
+#         # не попадает в это условие и видит текст на странице "verification.html"
+#         auth.login(request, user)
+#     return render(request, 'authapp/verification.html')
+
 def veryfy(request, email, activation_key):
-    user = ShopUser.objects.get(email=email)
-    if user.activation_key == activation_key and not user.is_activation_key_expired():
-        user.is_active = True
-        # для запрета повторных активаций пользователя "user.activation_key = ''"
-        user.activation_key = ''
-        user.save()
-        # Если с пользователем всё хорошо, то логиним, если нет, то анонимный пользователь
-        # не попадает в это условие и видит текст на странице "verification.html"
-        auth.login(request, user)
-    return render(request, 'authapp/verification.html')
+    try:
+        user = ShopUser.objects.get(email=email)
+        if user.activation_key == activation_key and not user.is_activation_key_expired():
+            user.is_active = True
+            # для запрета повторных активаций пользователя "user.activation_key = ''"
+            user.activation_key = ''
+            user.save()
+            # Если с пользователем всё хорошо, то логиним, если нет, то анонимный пользователь
+            # не попадает в это условие и видит текст на странице "verification.html"
+            auth.login(request, backend=user)
+        return render(request, 'authapp/verification.html')
+
+    except Exception as err:
+        print(f'error activation user: {err.args}')
+
+    return HttpResponseRedirect(reverse('main'))
